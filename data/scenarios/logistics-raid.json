@@ -1,0 +1,15 @@
+{
+  "id": "logistics-raid",
+  "name": "Logistics Raid",
+  "description": "Cargo drones escorted by kamikaze units. Protect the supply depot.",
+  "environment": "rural",
+  "timeOfDay": "day",
+  "difficulty": 3,
+  "sensorQuality": 0.85,
+  "duration": 120,
+  "code": "Mission 07",
+  "threats": [
+    { "type": "cargo", "count": 3 },
+    { "type": "kamikaze", "count": 2 }
+  ]
+}

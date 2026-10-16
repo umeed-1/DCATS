@@ -1,0 +1,16 @@
+{
+  "id": "degraded-ops",
+  "name": "Degraded Operations",
+  "description": "Mixed threats in forest terrain with heavy EW jamming. Sensor quality severely degraded.",
+  "environment": "forest",
+  "timeOfDay": "dusk",
+  "difficulty": 4,
+  "sensorQuality": 0.3,
+  "duration": 150,
+  "code": "Mission 04",
+  "threats": [
+    { "type": "ewJammer", "count": 1 },
+    { "type": "kamikaze", "count": 2 },
+    { "type": "decoy", "count": 1 }
+  ]
+}

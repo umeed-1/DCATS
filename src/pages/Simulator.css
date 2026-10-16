@@ -1,0 +1,2138 @@
+/* ============================================================
+   Simulator Page — operator console theme
+   Light C2/CUAS station: light chrome, square geometry, mono
+   data type, semantic reads (navy UI / amber caution / red
+   hostile / green nominal). Instruments stay dark on purpose —
+   the EO/IR feed, the PPI scopes and the scene overlay chips ride
+   on video, the way real operator displays do. Every override is
+   scoped under .simulator / .sim-idle.
+   ============================================================ */
+
+.simulator {
+  /* Light station chrome: colour tokens inherit from the global light
+     design system — the instruments, not the panels, carry the dark. */
+  /* Field-console type: bundled Roboto Condensed (labels, structure) and
+     Roboto Mono (telemetry, numbers) — see @font-face in index.css. */
+  --font-ui: "Roboto Condensed", "Bahnschrift", "Arial Narrow", "Segoe UI", sans-serif;
+  --font-mono: "Roboto Mono", "Cascadia Mono", "Consolas", monospace;
+  /* Instrument chrome: everything squared off. */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 3px;
+  /* Right-rail geometry, shared by the layout and the HUD bar so the TIME LEFT
+     countdown can sit directly above the 3D feed's top-right REC stamp. */
+  --rail-w: 344px;
+  --layout-gap: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 620px;
+  padding: 10px;
+  gap: 10px;
+  overflow: hidden;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint station grid behind the panels */
+.simulator::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(27, 78, 143, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 78, 143, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.simulator > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* === Idle screen === */
+.sim-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  min-height: 620px;
+  gap: var(--space-lg);
+  text-align: center;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: "Roboto Condensed", "Bahnschrift", "Arial Narrow", sans-serif;
+}
+
+.sim-idle-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 42px 56px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-top: 3px solid var(--accent);
+}
+
+.sim-idle h2 {
+  font-family: "Roboto Mono", "Cascadia Mono", Consolas, monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.sim-idle p {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* === Console strip (exercise header / system status / zulu clock) === */
+.console-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 6px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.console-strip-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.console-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.console-sim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 7px;
+  border: 1px solid rgba(154, 103, 0, 0.45);
+  background: rgba(154, 103, 0, 0.08);
+  color: var(--warn);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.console-sim-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--warn);
+  animation: blink 1.6s infinite;
+}
+
+.console-sys {
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.console-sys b { font-weight: 700; }
+
+.console-zulu {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.console-exit {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--threat);
+  border: 1px solid var(--threat);
+  padding: 3px 10px;
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease;
+  white-space: nowrap;
+}
+
+.console-exit:hover {
+  background: #8f1f18;
+  border-color: #8f1f18;
+  color: #ffffff;
+}
+
+/* === HUD Bar === */
+.sim-hud-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.7vw, 24px);
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.hud-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+}
+
+.hud-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.hud-value {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.hud-scene-day { color: var(--warn); }
+.hud-scene-dusk { color: #c2410c; }
+.hud-scene-night { color: var(--violet); }
+
+/* Pause/Resume is pinned above the 3D feed's top-right corner — the slot the
+ * mission countdown used to hold. `right` cancels the right rail and layout
+ * gap so it lands over the feed's right edge, not the window's. */
+.hud-controls {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--rail-w) + var(--layout-gap) + 16px);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* === Main Layout === */
+.sim-layout {
+  display: flex;
+  gap: var(--layout-gap);
+  flex: 1;
+  min-height: 0;
+}
+
+.sim-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* === Viewport (3D feed) === */
+.sim-radar-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: #03080f;
+  min-height: 0;
+}
+
+/* Corner brackets — instrument framing */
+.sim-radar-container::before,
+.sim-radar-container::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 5;
+  pointer-events: none;
+  border-color: rgba(85, 214, 245, 0.45);
+}
+
+.sim-radar-container::before {
+  top: 8px;
+  left: 8px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.sim-radar-container::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+.sim-radar-container:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  border: none;
+  z-index: 2000;
+}
+
+.sim-radar-container:fullscreen .sim-3d-host {
+  min-height: 100vh;
+}
+
+/* Full View — HUD tag styling (white-on-feed) in the bottom-right corner.
+ * Lives inside the fullscreened viewport, so it doubles as the exit control.
+ * Icon only: a square target that reads as "expand" out of Full View and
+ * "collapse" while in it. */
+.fullview-fab {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 24;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: rgba(3, 10, 20, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.94);
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.fullview-fab:hover {
+  background: rgba(10, 26, 44, 0.9);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.fullview-fab.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35), inset 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.fullview-fab svg { display: block; opacity: 0.9; }
+
+/* Camera presets — a small Cams chip beside the REC stamp in the feed's
+ * top-left corner. Clicking it opens the four view names downward into the
+ * picture. Free/Orbit stays fully navigable; Top, Chase and Ground are damped
+ * camera moves inside Battlefield3D. */
+.sim-cam-dock {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: var(--font-mono);
+  pointer-events: auto;
+}
+
+/* The four view names drop out of the Cams chip as a column — the chip sits on
+ * the feed's top edge now, so the list grows down rather than up. */
+.sim-cam-views {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+}
+
+/* The collapsed CAM chip and the four view names share one look: written
+ * words read faster and stay distinguishable at this size. */
+.sim-cam-fab,
+.sim-cam-view {
+  position: relative;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 33px;
+  height: 25px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 3px;
+  background: rgba(3, 10, 20, 0.78);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.sim-cam-fab:hover,
+.sim-cam-view:hover {
+  background: rgba(10, 26, 44, 0.9);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.sim-cam-fab.is-open {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35), inset 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.sim-cam-view.is-active {
+  border-color: #ffffff;
+  background: rgba(36, 147, 207, 0.62);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(120, 200, 255, 0.4), inset 0 0 8px rgba(160, 220, 255, 0.15);
+}
+
+.sim-cam-fab:focus-visible,
+.sim-cam-view:focus-visible {
+  outline: 1px solid rgba(160, 230, 255, 0.9);
+  outline-offset: 1px;
+}
+
+/* Radar pop box — passive PPI repeater in the bottom-left corner of the
+ * feed. Display only (pointer-events off) so the feed stays fully
+ * interactive; translucent glass so terrain reads through it. */
+.radar-pip {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  width: 226px;
+  padding: 0;
+  display: block;
+  background: rgba(8, 18, 32, 0.16);
+  border: 1px solid rgba(200, 234, 255, 0.38);
+  border-radius: 12px;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.38),
+    inset 0 0 22px rgba(130, 200, 255, 0.07);
+  backdrop-filter: blur(7px) saturate(1.2);
+  -webkit-backdrop-filter: blur(7px) saturate(1.2);
+  overflow: hidden;
+  pointer-events: none;
+  text-align: left;
+  font-family: var(--font-mono);
+}
+
+.radar-pip-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.radar-pip-label {
+  position: absolute;
+  top: 8px;
+  left: 11px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(225, 244, 255, 0.78);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  white-space: nowrap;
+}
+
+/* === Full View engagement board ===
+ * Glass panel over the EO/IR feed carrying the four operator actions —
+ * Acquire, Classify, Report, Engage. Shown only in Full View, where the
+ * right rail (and its contact board) is off-screen. Pinned to the feed's
+ * top-right corner (REC stamp owns top-left). */
+.engage-board {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 23;
+  width: min(390px, calc(100% - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 18px;
+  border-radius: 16px;
+  /* Same glass as the radar pop box (.radar-pip): a faint tint plus a light
+     blur so the feed reads straight through the panel. Legibility is carried
+     by a dark halo on the text and by the controls' own fills. */
+  border: 1px solid rgba(200, 234, 255, 0.38);
+  background: rgba(8, 18, 32, 0.16);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.38),
+    inset 0 0 22px rgba(130, 200, 255, 0.07);
+  backdrop-filter: blur(7px) saturate(1.2);
+  -webkit-backdrop-filter: blur(7px) saturate(1.2);
+  color: rgba(240, 249, 255, 0.98);
+  /* Inherited by every label so the transparent glass never eats the type. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.92), 0 0 9px rgba(0, 0, 0, 0.62);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+.engage-board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.engage-board-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.engage-board-status {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #8bf3bd;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.engage-board-status.is-hold {
+  color: #ffc65c;
+}
+
+.engage-empty {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(236, 247, 255, 0.96);
+}
+
+/* Contact list — the same anatomy as the right rail's Drone Board (state
+ * glyph, track id, status chip, meta line) so Full View carries the same
+ * information without the rail. Rows stay transparent so the feed reads
+ * through; only hover and selection tint them. */
+.engage-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+/* Row wrapper: the track body selects, the inline Acquire button sits beside
+ * it (same split as the right rail's Drone Board). */
+.engage-contact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 6px 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(246, 252, 255, 0.98);
+  font: 700 0.66rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.engage-contact:hover {
+  background: rgba(38, 84, 122, 0.5);
+  border-color: rgba(215, 242, 255, 0.42);
+}
+
+.engage-contact.is-active {
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(58, 118, 168, 0.55);
+  color: #ffffff;
+}
+
+/* Keep the selected row reading as selected even under the cursor. */
+.engage-contact.is-active:hover {
+  background: rgba(58, 118, 168, 0.62);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.engage-contact.is-lost {
+  opacity: 0.55;
+}
+
+.engage-contact.is-lost:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.engage-contact-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.engage-contact.is-lost .engage-contact-select {
+  cursor: not-allowed;
+}
+
+.engage-contact-select:focus-visible {
+  outline: 2px solid rgba(215, 242, 255, 0.85);
+  outline-offset: 2px;
+}
+
+/* Dark-glass twin of the rail's .contact-acquire — light text on a faint
+ * fill instead of the rail's accent-soft chip. */
+.engage-contact-acquire {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 4px 8px;
+  border: 1px solid rgba(196, 230, 255, 0.55);
+  background: rgba(13, 29, 47, 0.55);
+  color: rgba(232, 246, 255, 0.95);
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.engage-contact-acquire:hover:not(:disabled) {
+  background: rgba(58, 118, 168, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+}
+
+.engage-contact-acquire:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.engage-contact-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.engage-contact-line {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.engage-contact-id {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.engage-contact-chip {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 1px 6px;
+  border: 1px solid rgba(196, 230, 255, 0.45);
+  border-radius: 3px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(232, 246, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.engage-contact-chip.chip-new { color: rgba(224, 240, 252, 0.88); border-color: rgba(196, 230, 255, 0.42); }
+.engage-contact-chip.chip-tracked { color: #ffd166; border-color: rgba(255, 209, 102, 0.6); }
+.engage-contact-chip.chip-analyzing { color: #8fd8ff; border-color: rgba(143, 216, 255, 0.6); }
+.engage-contact-chip.chip-assessed { color: #ff9b8a; border-color: rgba(255, 155, 138, 0.6); }
+
+.engage-contact-meta {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(216, 236, 250, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.engage-contact-meta.is-lost { color: #ffc766; }
+
+/* Dark glass: the shared TrackGlyph tints are drawn for the light right-rail
+ * cards, so restate them in the board's palette. */
+.engage-board .track-glyph { margin-top: 0; }
+.engage-board .track-glyph path { stroke: #ffc766; }
+.engage-board .track-glyph-hostile path { stroke: #ff9b8a; fill: rgba(255, 143, 122, 0.2); }
+.engage-board .track-glyph-hostile circle { fill: #ff9b8a; }
+.engage-board .track-glyph-lost path { stroke: #ffc766; }
+.engage-board .track-glyph-resolved path { stroke: rgba(214, 238, 255, 0.8); }
+
+.engage-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(242, 250, 255, 0.98);
+}
+
+.engage-readout i {
+  font-style: normal;
+  margin-right: 4px;
+  color: rgba(180, 216, 245, 0.95);
+}
+
+.engage-lost {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ffc766;
+}
+
+/* The four operator actions are the same compact chip as the row Acquire in
+ * the Drone Board — one row of small bordered buttons, not cards. */
+.engage-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.engage-action {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 5px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(196, 230, 255, 0.55);
+  background: rgba(13, 29, 47, 0.55);
+  color: rgba(232, 246, 255, 0.95);
+  font: 700 0.54rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.engage-action:hover:not(:disabled) {
+  background: rgba(58, 118, 168, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+}
+
+.engage-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.engage-action.is-next {
+  border-color: rgba(126, 227, 177, 0.9);
+  box-shadow: 0 0 10px rgba(90, 220, 160, 0.35);
+}
+
+.engage-action.is-done {
+  border-color: rgba(126, 227, 177, 0.6);
+  color: #b3ffd8;
+}
+
+.engage-action.is-danger {
+  border-color: rgba(255, 130, 120, 0.85);
+  background: rgba(120, 30, 26, 0.55);
+  color: #ffe4e1;
+}
+
+.engage-classify {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.engage-classify-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(196, 230, 255, 0.55);
+  background: rgba(8, 20, 34, 0.86);
+  color: #ffffff;
+  font: 600 0.6rem var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+.engage-mini {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(196, 230, 255, 0.55);
+  background: rgba(13, 29, 47, 0.55);
+  color: rgba(232, 246, 255, 0.95);
+  font: 700 0.56rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.engage-mini-primary {
+  border-color: rgba(126, 227, 177, 0.7);
+  background: rgba(24, 92, 62, 0.66);
+  color: #dcffef;
+}
+
+.engage-mini:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.engage-hint {
+  margin: 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: rgba(232, 246, 255, 0.95);
+  text-transform: none;
+}
+
+/* Mission notices over the feed — the intercept countdown and its impact
+ * confirmation show in both views; Full View adds new-contact, report and
+ * guidance cues from its side. They rise from the bottom-centre, clear
+ * quickly, and never take pointer events, so drag/zoom stay uninterrupted. */
+.scene-notices {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 24;
+  width: min(470px, calc(100% - 180px));
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  pointer-events: none;
+  font-family: var(--font-mono);
+}
+
+.scene-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  border-left: 3px solid #7dd3fc;
+  border-radius: 3px;
+  background: rgba(4, 14, 27, 0.86);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
+  color: rgba(240, 249, 255, 0.98);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation:
+    scene-notice-in 160ms ease-out,
+    scene-notice-out 240ms ease-in forwards;
+  animation-delay: 0s, calc(var(--notice-life, 3200ms) - 260ms);
+}
+
+.scene-notice.is-contact { border-left-color: #7dd3fc; }
+.scene-notice.is-team { border-left-color: #e8b04b; }
+.scene-notice.is-guidance-engage { border-left-color: #5ee6a5; }
+.scene-notice.is-guidance-hold { border-left-color: #ff9a4d; }
+.scene-notice.is-neutralised { border-left-color: #5ee6a5; }
+/* The countdown lives until the store resolves the kill, so it must not use
+   the timed fade-out the transient notices use. */
+.scene-notice.is-timer {
+  border-left-color: #ffc27a;
+  animation: scene-notice-in 160ms ease-out;
+  animation-delay: 0s;
+}
+
+.scene-notice-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: #7dd3fc;
+}
+
+.scene-notice.is-team .scene-notice-icon { color: #e8b04b; }
+.scene-notice.is-guidance-engage .scene-notice-icon { color: #5ee6a5; }
+.scene-notice.is-guidance-hold .scene-notice-icon { color: #ff9a4d; }
+.scene-notice.is-neutralised .scene-notice-icon { color: #5ee6a5; }
+.scene-notice.is-timer .scene-notice-icon { color: #ffc27a; }
+
+.scene-notice-copy {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.scene-notice-title {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.scene-notice-body {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(232, 246, 255, 0.95);
+}
+
+@keyframes scene-notice-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes scene-notice-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Narrow feeds: at this width the 390px board would run into the REC stamp
+   sharing the top row, so drop it just below the stamp. */
+@media (max-width: 660px) {
+  .engage-board { top: 58px; }
+}
+
+/* VR control — same square, same border, same inset as the Full View control,
+ * parked one gap (plus the FAB's own width) to its left. Geometry is derived
+ * from the FAB rather than duplicated, so the pair can never drift apart. */
+.sim-vr-button {
+  --vr-size: 33px;
+  --vr-inset: 14px;
+  --vr-gap: 8px;
+  position: absolute !important;
+  right: calc(var(--vr-inset) + var(--vr-size) + var(--vr-gap)) !important;
+  bottom: var(--vr-inset) !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 24 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+  box-sizing: border-box !important;
+  width: var(--vr-size) !important;
+  height: var(--vr-size) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.68) !important;
+  border-radius: 3px !important;
+  background: rgba(3, 10, 20, 0.78) !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+  line-height: 0 !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.sim-vr-button svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  opacity: 0.9;
+}
+
+.sim-vr-button:hover {
+  background: rgba(10, 26, 44, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.sim-vr-button.is-available {
+  border-color: rgba(0, 212, 255, 0.72) !important;
+}
+
+.sim-vr-button.is-active {
+  border-color: #00d4ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.32), inset 0 0 8px rgba(0, 212, 255, 0.12) !important;
+}
+
+.sim-vr-button.is-active .sim-vr-eye {
+  fill: currentColor;
+}
+
+/* Desktop status line for the VR control — explains an absent headset or a
+ * finished session without blocking the feed. */
+.sim-vr-status {
+  position: absolute;
+  right: 14px;
+  bottom: 60px;
+  z-index: 24;
+  max-width: min(270px, calc(100% - 32px));
+  padding: 7px 10px;
+  border: 1px solid rgba(154, 220, 255, 0.28);
+  border-radius: 2px;
+  background: rgba(4, 15, 29, 0.92);
+  color: #d8f2ff;
+  font: 500 10px/1.45 var(--font-mono);
+  letter-spacing: 0.03em;
+  text-transform: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+
+.sim-vr-status.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sim-3d-host {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  position: relative;
+}
+
+.scene-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px;
+  pointer-events: none;
+  color: rgba(235, 247, 255, 0.88);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.scene-overlay-top,
+.scene-overlay-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+/* Top row now carries only the REC stamp — keep it pinned left, so the
+   engagement board can hold the top-right corner. */
+.scene-overlay-top {
+  justify-content: flex-start;
+}
+
+/* Legend row retired — the radar repeater owns the bottom-left corner. */
+.scene-overlay-bottom {
+  justify-content: flex-end;
+}
+
+.scene-legend,
+.scene-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 9px;
+  border: 1px solid rgba(150, 220, 255, 0.2);
+  background: rgba(2, 10, 22, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.scene-legend,
+.scene-telemetry {
+  gap: 12px;
+  color: rgba(222, 241, 255, 0.72);
+}
+
+.scene-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+}
+
+.legend-threat { background: #ff625a; }
+.legend-base { background: #45f09a; }
+.legend-range { background: #5cd7ff; }
+
+/* EO/IR feed dressing: scanline weave, edge vignette, centre reticle and a
+   live REC stamp — the cues real operator feeds carry. */
+.scene-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px);
+  opacity: 0.7;
+}
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(2, 8, 16, 0.5) 100%);
+}
+
+.scene-reticle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.scene-reticle svg { display: block; }
+
+.scene-top-right {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.scene-rec {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 110, 100, 0.4);
+  background: rgba(2, 10, 22, 0.58);
+  backdrop-filter: blur(3px);
+  color: #ffb9b3;
+}
+
+.scene-rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5348;
+  box-shadow: 0 0 8px rgba(255, 83, 72, 0.9);
+  animation: scene-blink 1.3s steps(2, start) infinite;
+}
+
+/* Mission countdown, centred on the top edge of the feed — the operator can
+   read it from the picture alone, without leaving the EO/IR view. */
+.scene-timer {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 6px 12px;
+  border: 1px solid rgba(150, 220, 255, 0.4);
+  border-radius: 3px;
+  background: rgba(2, 10, 22, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: rgba(238, 249, 255, 0.98);
+  white-space: nowrap;
+}
+
+.scene-timer-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(206, 232, 252, 0.88);
+}
+
+.scene-timer-value {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.scene-timer.is-low {
+  border-color: rgba(255, 110, 100, 0.5);
+  color: #ffb9b3;
+}
+
+@keyframes scene-blink {
+  50% { opacity: 0.2; }
+}
+
+/* Shown when WebGL is unavailable and the feed cannot render. */
+.sim-degraded-note {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--warn-soft);
+  border: 1px solid rgba(154, 103, 0, 0.4);
+  color: var(--warn);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Paused: light dim + a slim badge. The single Resume control lives in the
+   HUD bar, so this overlay never blocks the viewport (pointer-events off). */
+.sim-paused-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20px;
+  background: rgba(4, 10, 18, 0.32);
+  pointer-events: none;
+}
+
+.sim-paused-overlay span {
+  padding: 8px 16px;
+  border: 1px solid rgba(154, 103, 0, 0.5);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--warn);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(16, 24, 40, 0.18);
+}
+
+.sim-complete-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.sim-complete-overlay span {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--safe);
+}
+
+.sim-complete-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* === Right Panel === */
+.sim-right-panel {
+  width: var(--rail-w);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sim-panel {
+  padding: 10px 12px;
+}
+
+.simulator .card {
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+.simulator .card:hover {
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.simulator .section-label {
+  letter-spacing: 0.16em;
+  margin-bottom: 8px;
+}
+
+/* === Drone Board (contact board) === */
+.threat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+
+.threat-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* The track body is the select target; the inline Acquire button sits beside
+   it and never triggers selection itself. */
+.contact-select {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.contact-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.contact-acquire {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 4px 8px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.contact-acquire:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.contact-acquire:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.threat-list-item:hover {
+  background: var(--bg-subtle);
+}
+
+.threat-list-item.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+
+/* Resolved / signal-lost rows stay readable — state is carried by colour
+   and text, not by fading the whole row out (text under the cursor never
+   goes dim). */
+.threat-list-item.neutralised {
+  opacity: 1;
+  cursor: default;
+}
+
+.threat-list-item.neutralised .contact-id {
+  color: var(--text-muted);
+}
+
+.threat-list-item.neutralised .contact-meta {
+  color: var(--safe);
+}
+
+.threat-list-item.hidden {
+  cursor: not-allowed;
+}
+
+.threat-list-item.hidden .contact-select {
+  cursor: not-allowed;
+}
+
+.threat-list-item.neutralised .contact-select {
+  cursor: default;
+}
+
+.threat-list-item.hidden .contact-id {
+  color: var(--warn);
+}
+
+.threat-list-item.hidden:hover {
+  background: transparent;
+}
+
+.track-glyph {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.track-glyph-resolved { opacity: 0.6; }
+
+.contact-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-id {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.contact-chip {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 1px 5px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.chip-new { color: var(--text-muted); border-color: var(--border-strong); }
+.chip-tracked { color: var(--warn); border-color: rgba(154, 103, 0, 0.45); }
+.chip-analyzing { color: var(--accent); border-color: var(--accent-line); }
+.chip-assessed { color: var(--threat); border-color: rgba(179, 38, 30, 0.45); }
+
+.contact-meta {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-meta-lost {
+  color: var(--warn);
+}
+
+.threat-list-status {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-top: 3px;
+}
+
+/* === Operator Actions === */
+.action-panel .section-label {
+  color: var(--accent);
+}
+
+.track-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  padding: 7px 8px;
+  margin-bottom: 8px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+.readout-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.readout-item i {
+  font-style: normal;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* Signal strength colouring — return quality rises as a drone closes on the
+ * centre, so the readout reads green up close and red at the coverage edge. */
+.readout-item.sig-strong,
+.engage-readout .sig-strong { color: #6ee7a8; }
+.readout-item.sig-fair,
+.engage-readout .sig-fair { color: #e8b04b; }
+.readout-item.sig-weak,
+.engage-readout .sig-weak { color: #ff8f7a; }
+
+.signal-lost-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(154, 103, 0, 0.4);
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action-buttons .btn {
+  justify-content: flex-start;
+  width: 100%;
+  padding: 8px 12px;
+}
+
+/* The button matching the Next-step guidance line carries a soft pulse so the
+   path forward is visible at a glance. */
+.action-buttons .btn.is-suggested:not(:disabled) {
+  border-color: var(--accent);
+  animation: suggestedPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes suggestedPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(27, 78, 143, 0.28), 0 0 10px rgba(27, 78, 143, 0.12); }
+  50% { box-shadow: 0 0 0 1px rgba(27, 78, 143, 0.55), 0 0 16px rgba(27, 78, 143, 0.22); }
+}
+
+/* === Console button skin (scoped) === */
+.simulator .btn {
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+.simulator .btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.simulator .btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.simulator .btn-danger {
+  background: var(--threat);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.simulator .btn-danger:hover:not(:disabled) {
+  background: #8f1f18;
+}
+
+.simulator .btn-outline {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.simulator .btn-outline:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.simulator .btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.simulator .btn-ghost:hover:not(:disabled) {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+/* Disabled controls stay legible: a flat, clearly-inactive chip instead of
+   the global 45%-opacity fade (which left text unreadable). */
+.simulator .btn:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.simulator .btn-outline:disabled,
+.simulator .btn-primary:disabled,
+.simulator .btn-danger:disabled {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.simulator .btn-ghost:disabled {
+  color: var(--text-muted);
+}
+
+.simulator .key-badge {
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.6rem;
+  background: var(--bg-inset);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+
+/* === AI Assessment Aid === */
+.ai-panel {
+  border-top: 2px solid var(--accent);
+}
+
+.ai-prediction {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-pred-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sensor-ID thumbnail — line-art target profile on a scanline panel, like a
+   feed capture pinned next to the classification. */
+.ai-pred-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  background:
+    repeating-linear-gradient(0deg, rgba(23, 33, 43, 0.04) 0 1px, transparent 1px 3px),
+    var(--bg-inset);
+}
+
+.ai-pred-thumb svg { display: block; }
+
+.action-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.action-thumb {
+  display: inline-flex;
+  color: var(--text-secondary);
+}
+
+.action-thumb svg { display: block; }
+
+.ai-pred-type {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-confidence {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border: 1px solid var(--border-strong);
+}
+
+.ai-confidence.high {
+  color: var(--safe);
+  border-color: rgba(30, 123, 79, 0.4);
+  background: var(--safe-soft);
+}
+
+.ai-confidence.low {
+  color: var(--warn);
+  border-color: rgba(154, 103, 0, 0.4);
+  background: var(--warn-soft);
+}
+
+.ai-mode {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.ai-model-mode {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+.ai-features {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ai-feature-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+}
+
+.ai-feature-key {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+}
+
+.ai-feature-val {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.ai-analyzing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+}
+
+.ai-analyzing-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  animation: aiAnalyzingPulse 1.2s ease-in-out infinite;
+}
+
+.ai-analyzing-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ai-analyzing-title {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ai-analyzing-sub {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  color: var(--text-muted);
+}
+
+@keyframes aiAnalyzingPulse {
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+.ai-explanation {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin: 0;
+}
+
+.classification-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.ai-choice-label {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.classification-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-inset);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.76rem;
+  color-scheme: light;
+}
+
+.classification-select:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.classification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.classification-actions .btn {
+  flex: 1;
+  justify-content: center;
+  padding: 8px;
+  font-size: 0.64rem;
+}
+
+.ai-choice-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+.technical-details {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+}
+
+.ai-details {
+  margin-top: 8px;
+}
+
+.ai-details .ai-explanation {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.technical-details summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.technical-details summary:hover {
+  color: var(--accent-hover);
+}
+
+.technical-details .ai-features {
+  margin-top: 8px;
+}
+
+/* === Sitrep Log === */
+.sim-event-log.card {
+  /* Reserve the log's space up front: incoming rows scroll inside this
+     fixed area instead of taking height away from the 3D feed. */
+  flex-shrink: 0;
+  height: clamp(120px, 14vh, 152px);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+}
+
+.sim-event-log .section-label {
+  flex-shrink: 0;
+}
+
+.event-log-entries {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* One event per row: dot, sentence, time. Track codes and times are dim
+   secondary detail (colour-coded dot marks the action type). */
+.event-entry {
+  display: grid;
+  grid-template-columns: 7px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 4px 2px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+
+.event-entry:last-child { border-bottom: 0; }
+
+.event-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.event-dot-track { background: var(--accent); }
+.event-dot-classify { background: var(--warn); }
+.event-dot-alert { background: var(--violet); }
+.event-dot-engage { background: var(--threat); }
+
+.event-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+
+.event-code {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.event-time {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+/* === Guidance === */
+.next-step {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.next-step-tag {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.panel-hint {
+  margin: 8px 0 0;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* === Responsive ===
+ * The console is desktop-first, but it degrades instead of clipping:
+ * panel and HUD compress first, and below ~760px the layout stacks and
+ * the page scrolls rather than hiding controls. */
+@media (max-width: 1100px) {
+  .simulator { --rail-w: 300px; }
+}
+
+@media (max-width: 900px) {
+  .simulator { --rail-w: 260px; }
+  .sim-hud-bar { flex-wrap: wrap; row-gap: 6px; }
+}
+
+@media (max-width: 760px) {
+  .simulator {
+    --rail-w: 0px;
+    --layout-gap: 0px;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+  .sim-layout {
+    flex-direction: column;
+  }
+  /* Tall enough for the 3D host's own min-height so the feed is never
+     clipped by the viewport's overflow. */
+  .sim-radar-container { min-height: 424px; }
+  .sim-right-panel { width: auto; }
+}
+
+/* === Console boot overlay ===
+ * Covers the whole console while the EO/IR feed renders its first frame.
+ * Light station chrome — the boot screen belongs to the page, not the feed. */
+.sim-boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(720px 380px at 50% 42%, var(--accent-soft), transparent 70%),
+    radial-gradient(600px 320px at 88% 88%, var(--safe-soft), transparent 72%),
+    var(--bg-page);
+  animation: simBootIn 180ms ease-out both;
+}
+
+.sim-boot-overlay.is-leaving {
+  animation: simBootOut 300ms ease-in forwards;
+  pointer-events: none;
+}
+
+.sim-boot-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.sim-boot-brand {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--accent);
+}
+
+.sim-boot-title {
+  font-family: var(--font-ui);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.sim-boot-sub {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sim-boot-bar {
+  position: relative;
+  width: 224px;
+  height: 3px;
+  margin-top: var(--space-sm);
+  overflow: hidden;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+.sim-boot-bar span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #1b4e8f 30%, #5e9edb 70%, transparent);
+  animation: simBootSweep 1.15s ease-in-out infinite;
+}
+
+.sim-boot-meta {
+  margin-top: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+@keyframes simBootIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes simBootOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes simBootSweep {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(360%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sim-boot-overlay,
+  .sim-boot-overlay.is-leaving {
+    animation-duration: 1ms;
+  }
+  .sim-boot-bar span {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+}

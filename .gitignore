@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+release/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local overrides
+*.local
+
+# Submission paperwork / presentation assets - not part of the application.
+sih_ppt_slides/
+sih_format.pdf
+sihppt.txt
+executive_summary.txt
+jury_verdict.txt
+problem_statement.txt
+sih_submission_content.md
+
+# Third-party reference material (competitor source, SIH dataset).
+references/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

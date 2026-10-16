@@ -1,0 +1,12 @@
+{
+  "id": "basic-recon",
+  "name": "Basic Reconnaissance",
+  "description": "Two scout drones surveying a rural area. Clear conditions, high sensor quality.",
+  "environment": "rural",
+  "timeOfDay": "day",
+  "difficulty": 1,
+  "sensorQuality": 0.95,
+  "duration": 90,
+  "code": "Mission 01",
+  "threats": [{ "type": "scout", "count": 2 }]
+}

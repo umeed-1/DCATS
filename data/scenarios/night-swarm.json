@@ -1,0 +1,12 @@
+{
+  "id": "night-swarm",
+  "name": "Night Swarm Assault",
+  "description": "Coordinated swarm attack under cover of darkness. Night vision degraded.",
+  "environment": "urban",
+  "timeOfDay": "night",
+  "difficulty": 4,
+  "sensorQuality": 0.6,
+  "duration": 120,
+  "code": "Mission 03",
+  "threats": [{ "type": "swarmNode", "count": 8 }]
+}

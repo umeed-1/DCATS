@@ -1,0 +1,23 @@
+{
+  "name": "DCATS — Drone Countermeasure and Assessment Training System",
+  "short_name": "DCATS",
+  "description": "AI-enabled drone & counter-drone threat simulation trainer. Fully offline. SIH26247.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F2F4F7",
+  "theme_color": "#F2F4F7",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

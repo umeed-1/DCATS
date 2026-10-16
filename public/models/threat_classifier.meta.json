@@ -1,0 +1,31 @@
+{
+  "classes": [
+    "scout",
+    "cargo",
+    "kamikaze",
+    "ewJammer",
+    "decoy",
+    "swarmNode"
+  ],
+  "features": [
+    "speed",
+    "rcs",
+    "altitude",
+    "vx",
+    "vy",
+    "aggressive"
+  ],
+  "accuracy": 0.9991666666666666,
+  "accuracy_jittered": 0.9983333333333333,
+  "jitter": 0.02,
+  "n_estimators": 300,
+  "n_samples": 12000,
+  "importances": {
+    "speed": 0.28667024871888364,
+    "rcs": 0.6448557939131713,
+    "altitude": 0.0016399847961121841,
+    "vx": 0.001370073180884158,
+    "vy": 0.0017230466803947074,
+    "aggressive": 0.06374085271055416
+  }
+}

@@ -1,0 +1,297 @@
+/* Landing Page — light professional theme */
+
+.landing {
+  padding: 0 var(--space-xl);
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* === Hero === */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: calc(100vh - 56px);
+  gap: var(--space-3xl);
+  padding: var(--space-3xl) 0;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 620px;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-title {
+  font-family: var(--font-ui);
+  font-size: 3.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: var(--space-md);
+  color: var(--text-primary);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+.hero-stats {
+  display: flex;
+  gap: var(--space-2xl);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-lg);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.hero-stat-label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* === Minimal radar ===
+ * Two rings, one soft sweep and three contacts. Deliberately line-only and
+ * label-free so it reads as a quiet visual rather than a dense instrument. */
+.hero-radar {
+  width: 360px;
+  height: 360px;
+  flex-shrink: 0;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.radar-ring-outer {
+  opacity: 0.55;
+}
+
+.radar-ring-mid {
+  opacity: 0.28;
+}
+
+.radar-ring-inner {
+  opacity: 0.14;
+}
+
+.radar-axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 1 6;
+  opacity: 0.5;
+}
+
+/* Sweep: one gradient wedge fading behind a crisp leading edge. */
+.radar-sweep {
+  transform-origin: 0 0;
+  animation: radar-sweep-rotate 7s linear infinite;
+}
+
+@keyframes radar-sweep-rotate {
+  to { transform: rotate(360deg); }
+}
+
+.radar-sweep-stop-lead {
+  stop-color: var(--accent);
+  stop-opacity: 0.14;
+}
+
+.radar-sweep-stop-tail {
+  stop-color: var(--accent);
+  stop-opacity: 0;
+}
+
+.radar-sweep-edge {
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.65;
+}
+
+/* Contacts: soft steady pulse, staggered per blip. */
+.radar-blip {
+  fill: var(--threat);
+  animation: radar-blip-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes radar-blip-pulse {
+  0%, 100% { opacity: 0.9; r: 3.5; }
+  50% { opacity: 0.4; r: 2.5; }
+}
+
+.radar-center-ring {
+  fill: none;
+  stroke: var(--safe);
+  stroke-width: 1.4;
+}
+
+.radar-center-dot {
+  fill: var(--safe);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-sweep,
+  .radar-blip {
+    animation: none;
+  }
+}
+
+/* === Scenarios Section === */
+.scenarios-section {
+  padding: var(--space-3xl) 0;
+}
+
+.section-header {
+  margin-bottom: var(--space-xl);
+}
+
+.section-help {
+  max-width: 640px;
+  margin-top: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-md);
+}
+
+.scenario-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+}
+
+.scenario-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scenario-difficulty {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.scenario-reco {
+  margin-right: auto;
+  margin-left: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--safe);
+  background: var(--safe-soft);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.scenario-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.scenario-desc {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.btn-launch {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* === Footer === */
+.landing-footer {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-stats {
+    justify-content: center;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .hero-radar {
+    width: 300px;
+    height: 300px;
+  }
+  .hero-title {
+    font-size: 2.4rem;
+  }
+}

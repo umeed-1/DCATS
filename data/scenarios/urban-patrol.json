@@ -1,0 +1,16 @@
+{
+  "id": "urban-patrol",
+  "name": "Urban Grid Patrol",
+  "description": "Mixed threat package over urban terrain. Medium sensor quality.",
+  "environment": "urban",
+  "timeOfDay": "day",
+  "difficulty": 2,
+  "sensorQuality": 0.8,
+  "duration": 120,
+  "code": "Mission 02",
+  "threats": [
+    { "type": "scout", "count": 1 },
+    { "type": "cargo", "count": 1 },
+    { "type": "decoy", "count": 1 }
+  ]
+}

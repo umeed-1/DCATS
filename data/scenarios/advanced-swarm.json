@@ -1,0 +1,12 @@
+{
+  "id": "advanced-swarm",
+  "name": "Advanced Swarm Tactics",
+  "description": "20-node coordinated swarm with dynamic formation changes. Extreme difficulty.",
+  "environment": "urban",
+  "timeOfDay": "night",
+  "difficulty": 5,
+  "sensorQuality": 0.25,
+  "duration": 180,
+  "code": "Mission 06",
+  "threats": [{ "type": "swarmNode", "count": 20 }]
+}

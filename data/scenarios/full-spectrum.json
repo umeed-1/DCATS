@@ -1,0 +1,19 @@
+{
+  "id": "full-spectrum",
+  "name": "Full Spectrum Threat",
+  "description": "All threat types at night with EW jamming. Maximum difficulty.",
+  "environment": "mixed",
+  "timeOfDay": "night",
+  "difficulty": 5,
+  "sensorQuality": 0.2,
+  "duration": 180,
+  "code": "Mission 05",
+  "threats": [
+    { "type": "scout", "count": 2 },
+    { "type": "cargo", "count": 1 },
+    { "type": "kamikaze", "count": 2 },
+    { "type": "ewJammer", "count": 1 },
+    { "type": "decoy", "count": 1 },
+    { "type": "swarmNode", "count": 5 }
+  ]
+}

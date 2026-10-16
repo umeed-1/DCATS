@@ -1,0 +1,59 @@
+{
+  "name": "dcats",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DCATS — Drone Countermeasure and Assessment Training System (SIH26247)",
+  "author": "Team DCATS (SIH26247)",
+  "license": "MIT",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "check": "npm test && npm run build",
+    "electron:dev": "cross-env ELECTRON_DEV=1 electron .",
+    "electron:build": "npm run build && electron-builder --win"
+  },
+  "dependencies": {
+    "idb": "^8.0.4",
+    "onnxruntime-web": "^1.30.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "recharts": "^2.13.0",
+    "three": "^0.170.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "cross-env": "^10.1.0",
+    "electron": "^44.8.0",
+    "electron-builder": "^26.15.3",
+    "vite": "^6.0.0",
+    "vitest": "^5.0.5"
+  },
+  "build": {
+    "appId": "in.sih.dcats",
+    "productName": "DCATS",
+    "directories": {
+      "output": "release"
+    },
+    "publish": null,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "DCATS-Setup-${version}.exe"
+    }
+  }
+}

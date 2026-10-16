@@ -1,0 +1,170 @@
+/* Welcome — local trainee sign-in (light theme) */
+
+.welcome {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  padding: var(--space-2xl) var(--space-xl);
+  background: transparent;
+}
+
+/* === Brand masthead === */
+.welcome-brand {
+  text-align: center;
+}
+
+.welcome-brand-name {
+  font-family: var(--font-heading);
+  font-size: 2.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.05;
+  color: var(--text-primary);
+}
+
+.welcome-brand-sub {
+  margin-top: var(--space-xs);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+/* === Card === */
+.welcome-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-xl);
+  box-shadow: 0 18px 44px rgba(23, 33, 43, 0.09);
+}
+
+.welcome-card-head {
+  margin-bottom: var(--space-lg);
+}
+
+.welcome-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.welcome-card-help {
+  margin-top: var(--space-xs);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.welcome-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.welcome-field > span {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.welcome-field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--space-md);
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.welcome-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.welcome-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.welcome-pin {
+  position: relative;
+}
+
+.welcome-pin input {
+  padding-right: 64px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.18em;
+}
+
+.welcome-show {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.welcome-show:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+
+.welcome-error {
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--threat);
+  background: var(--threat-soft);
+  border-left: 3px solid var(--threat);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.welcome-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--space-xs);
+}
+
+.welcome-card .btn-outline.welcome-submit {
+  margin-top: var(--space-sm);
+}
+
+@media (max-width: 480px) {
+  .welcome {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .welcome-brand-name {
+    font-size: 2.1rem;
+  }
+
+  .welcome-brand-sub {
+    font-size: 0.74rem;
+  }
+
+  .welcome-card {
+    padding: var(--space-lg);
+  }
+}

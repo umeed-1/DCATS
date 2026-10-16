@@ -1,0 +1,513 @@
+/* AAR Page — light professional theme */
+
+.aar {
+  padding: var(--space-xl);
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.aar-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 56px);
+  gap: var(--space-lg);
+  text-align: center;
+}
+
+.aar-empty h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* === Header === */
+.aar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aar-subtitle {
+  margin-top: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+
+.aar-score-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.aar-score-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.aar-score-value {
+  font-family: var(--font-mono);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.aar-score-grade {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--safe);
+}
+
+/* Grade colouring matches the severity mapping used by the local instructor
+   history — EXCELLENT/GOOD green, NEEDS WORK amber, CRITICAL red. */
+.aar-score-grade.work { color: var(--warn); }
+.aar-score-grade.critical { color: var(--threat); }
+
+/* === Summary Grid === */
+.aar-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-md);
+}
+
+.aar-summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  text-align: center;
+  animation: fadeInUp 0.3s ease forwards;
+  opacity: 0;
+}
+
+.aar-summary-icon {
+  color: var(--text-muted);
+  display: flex;
+}
+
+.aar-summary-value {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.aar-summary-label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* === Charts === */
+.aar-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-md);
+}
+
+.aar-chart-card {
+  padding: var(--space-md);
+}
+
+.recharts-text {
+  fill: var(--text-muted) !important;
+}
+
+/* Confusion matrix table */
+.confusion-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.confusion-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 96px;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.7rem;
+}
+
+.confusion-row:last-child {
+  border-bottom: none;
+}
+
+.confusion-pair {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.confusion-header {
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.confusion-source {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+
+.confusion-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* === AI Training Advisor === */
+.aar-plan {
+  padding: var(--space-lg);
+}
+
+.aar-plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.aar-plan-title {
+  margin-top: 2px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.aar-plan-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+}
+
+.aar-plan-intro {
+  margin: var(--space-sm) 0 var(--space-md);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.plan-focus-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.plan-focus {
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--bg-subtle);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.plan-focus.plan-high {
+  border-left-color: var(--threat);
+  background: var(--threat-soft);
+}
+
+.plan-focus.plan-warn {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.plan-focus.plan-ok {
+  border-left-color: var(--safe);
+  background: var(--safe-soft);
+}
+
+.plan-focus-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.plan-focus-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.plan-focus-score {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.plan-focus-why {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.plan-drills {
+  margin: var(--space-xs) 0 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.plan-drills li {
+  font-size: 0.79rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.plan-trend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-inset);
+}
+
+.plan-trend-label,
+.plan-missions-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.plan-trend-text {
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.plan-missions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.plan-mission {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+}
+
+.plan-mission-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.plan-mission-code {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.plan-mission-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.plan-mission-reason {
+  font-size: 0.79rem;
+  color: var(--text-secondary);
+}
+
+.plan-mission-goal {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.plan-mission .btn {
+  flex-shrink: 0;
+}
+
+.plan-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.plan-how {
+  margin-top: var(--space-md);
+}
+
+.plan-how summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.plan-how summary:hover {
+  color: var(--accent);
+}
+
+.plan-how ul {
+  margin: var(--space-xs) 0 0;
+  padding-left: 1.1rem;
+}
+
+.plan-how li {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.rec-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.rec-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.55;
+}
+
+.rec-item.rec-high {
+  border-left-color: var(--threat);
+  background: var(--threat-soft);
+}
+
+.rec-item.rec-warn {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.rec-item.rec-ok {
+  border-left-color: var(--safe);
+  background: var(--safe-soft);
+}
+
+/* === Timeline === */
+.aar-timeline {
+  padding: var(--space-lg);
+}
+
+.timeline-entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.timeline-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.8rem;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-entry:last-child {
+  border-bottom: none;
+}
+
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.timeline-dot[data-type="track"] { background: var(--accent); }
+.timeline-dot[data-type="classify"] { background: var(--warn); }
+.timeline-dot[data-type="alert"] { background: var(--violet); }
+.timeline-dot[data-type="engage"] { background: var(--threat); }
+
+/* Action-type chip (owned by this page — the console log uses plain
+   sentences now and no longer styles these). */
+.event-type {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border: 1px solid var(--border-strong);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.event-type-track { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+.event-type-classify { background: var(--warn-soft); color: var(--warn); border-color: rgba(232, 176, 75, 0.45); }
+.event-type-alert { background: var(--violet-soft); color: var(--violet); border-color: rgba(185, 140, 255, 0.45); }
+.event-type-engage { background: var(--threat-soft); color: var(--threat); border-color: rgba(255, 83, 72, 0.45); }
+
+.timeline-time {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  min-width: 48px;
+}
+
+.timeline-detail {
+  color: var(--text-secondary);
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+/* === Actions === */
+.aar-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+}

@@ -1,0 +1,548 @@
+/* ============================================
+   DCATS — Design System
+   Light, professional, classic tool aesthetic.
+   No gradients, no glow, no glassmorphism.
+   ============================================ */
+
+/* === Operator-console type (bundled, offline) ===
+   Roboto Condensed + Roboto Mono — the type system field C2 apps such as
+   ATAK use. Shipped as local woff2 (no runtime font CDN); the light app
+   pages keep the system stack and simply never request these families. */
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('./assets/fonts/roboto-condensed-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('./assets/fonts/roboto-condensed-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('./assets/fonts/roboto-condensed-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./assets/fonts/roboto-mono-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./assets/fonts/roboto-mono-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* === Tokens === */
+:root {
+  /* Surfaces */
+  --bg-page: #F2F4F7;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F7F9FB;
+  --bg-inset: #EDF1F5;
+
+  /* Lines */
+  --border: #DCE3EA;
+  --border-strong: #C6D0DA;
+
+  /* Text */
+  --text-primary: #17212B;
+  --text-secondary: #4E5D6C;
+  --text-muted: #7A8794;
+
+  /* Semantic colours */
+  --accent: #1B4E8F;
+  --accent-hover: #163F74;
+  --accent-soft: #EAF1F9;
+  --accent-line: #C3D4E8;
+  --threat: #B3261E;
+  --threat-soft: #FBEBEA;
+  --safe: #1E7B4F;
+  --safe-soft: #E9F5EF;
+  --warn: #9A6700;
+  --warn-soft: #FBF3E2;
+  --violet: #61407F;
+  --violet-soft: #F1ECF7;
+
+  /* Typography — system stacks only (fully offline, no font fetch). The
+     operator console overrides both tokens with the bundled Roboto
+     Condensed / Roboto Mono faces declared in the @font-face block. */
+  --font-ui: "Bahnschrift", "Arial Narrow", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-ui);
+  --font-heading: var(--font-ui);
+  --font-mono: "Cascadia Mono", Consolas, "SF Mono", ui-monospace, Menlo, monospace;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Radius */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-normal: 200ms ease;
+}
+
+/* === Reset === */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* === Motion (subtle only) === */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.animate-fade-in { animation: fadeInUp 0.35s ease forwards; }
+
+/* === Icons === */
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* === Card === */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* === Buttons === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-danger {
+  background: var(--threat);
+  color: #FFFFFF;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #8F1E17;
+}
+
+.btn-outline {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.btn-lg {
+  padding: 11px 24px;
+  font-size: 0.85rem;
+}
+
+/* === Keyboard Key Badge === */
+.key-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 5px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+/* === Status Indicators === */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-dot.active { background: var(--safe); }
+.status-dot.warning { background: var(--warn); }
+.status-dot.threat { background: var(--threat); }
+.status-dot.neutral { background: var(--text-muted); }
+
+/* === Section Headers === */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+.section-title {
+  font-family: var(--font-ui);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+/* === Progress Bar === */
+.progress-bar {
+  height: 6px;
+  background: var(--bg-inset);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width var(--transition-normal);
+}
+
+/* === Navbar === */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-xl);
+  z-index: 1000;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-brand-icon {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.navbar-brand-text {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-primary);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  list-style: none;
+  height: 100%;
+}
+
+.navbar-links a {
+  display: inline-flex;
+  align-items: center;
+  height: 56px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.navbar-links a:hover {
+  color: var(--text-primary);
+}
+
+.navbar-links a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: 100%;
+  padding-left: var(--space-md);
+  border-left: 1px solid var(--border);
+}
+
+.navbar-user-id {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.navbar-signout {
+  padding: 5px 11px;
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.navbar-signout:hover {
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+  border-color: var(--accent-line);
+}
+
+.navbar-signout:focus-visible {
+  outline: none;
+  border-color: var(--accent-line);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* === Page Content === */
+.page-content {
+  margin-top: 56px;
+  flex: 1;
+  position: relative;
+}
+
+/* Narrow viewports: the fixed-height navbar must never push content down or
+   clip its links — the link row scrolls horizontally instead of wrapping. */
+@media (max-width: 760px) {
+  .navbar {
+    padding: 0 var(--space-md);
+  }
+  .navbar-links {
+    gap: var(--space-md);
+    overflow-x: auto;
+    min-width: 0;
+  }
+  .navbar-links a {
+    white-space: nowrap;
+    padding: 0 2px;
+  }
+}
+
+/* Operator-console route: no navbar, full-bleed dark shell. */
+.page-content-console {
+  margin-top: 0;
+  min-height: 100vh;
+  background: #05090f;
+}
+
+/* Welcome route: no navbar; the sign-in screen owns the full viewport. */
+.page-content-welcome {
+  margin-top: 0;
+  min-height: 100vh;
+}
+
+/* Welcome + mission select: plain white canvas. */
+.page-content-white {
+  background: #FFFFFF;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* === Utility Classes === */
+.text-accent { color: var(--accent); }
+.text-threat { color: var(--threat); }
+.text-safe { color: var(--safe); }
+.text-warn { color: var(--warn); }
+.text-violet { color: var(--violet); }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+.font-mono { font-family: var(--font-mono); }
+.font-heading { font-family: var(--font-ui); }
+
+/* === Error Boundary === */
+.error-boundary {
+  max-width: 620px;
+  margin: var(--space-3xl) auto;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.error-boundary-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--warn-soft);
+  color: var(--warn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-boundary h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.error-boundary-detail {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
