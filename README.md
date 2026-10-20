@@ -1,6 +1,6 @@
 # DCATS — Drone Countermeasure and Assessment Training System
 
-SIH26247 · AI-Enabled Drone & Counter-Drone Threat Simulation Trainer · Ministry of Defence · Smart India Hackathon 2026.
+AI-Enabled Drone & Counter-Drone Threat Simulation Trainer
 
 Offline-first trainer — browser (PWA), WebXR-capable 3D view, and packaged
 Windows desktop app (Electron).
@@ -85,5 +85,3 @@ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" \
 - Offline: first load the production app online so the service worker and model
   are cached, then disable networking and reopen. The packaged Electron build is
   offline by construction.
-- Documentation: `docs/architecture.md`, `docs/sih_readiness_audit.md`,
-  `sih_submission_content.md`, `demo_video_script.md`.
