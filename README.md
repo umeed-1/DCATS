@@ -8,16 +8,8 @@ Detect → independently classify → alert → engage drone threats across 9 sc
 packs, with emergent swarm AI, an in-browser ONNX advisory cue, weighted scoring,
 a detailed AAR dashboard and an instructor console with custom scenario authoring.
 
-## Quick start (web)
+<img width="1920" height="1080" alt="Screenshot 2026-10-20 081433" src="https://github.com/user-attachments/assets/ac98f821-2df1-451e-974c-c8202bbef617" />
 
-```bash
-npm ci
-npm run dev        # http://localhost:5173
-npm test           # 61 tests (Vitest)
-npm run check      # tests + production build
-npm run build      # production build in dist/ (PWA)
-npm run preview    # serve the production build
-```
 
 ## Desktop app (Electron)
 
