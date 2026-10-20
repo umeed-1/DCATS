@@ -36,9 +36,9 @@ npm run electron:dev     # terminal 2 — opens Electron on localhost:5173
 
 `electron:dev` starts Electron with `ELECTRON_DEV=1` and loads the Vite dev
 server. The packaged window sizes itself to the primary display's usable area
-and is centered, so it fits smaller laptop displays (including 1536×864 at 125%
-scaling) without clipping the navigation or bottom console. The rebuilt
-installer includes the display-fit window and the VR control.
+and is centered; at 1536×864 / 125% scaling this gives a 1474×779 content area
+without clipping the navigation or bottom console. The rebuilt installer
+includes the display-fit window and the VR control.
 
 ## VR view (WebXR)
 
@@ -108,16 +108,17 @@ desktop/PWA runtime. The app uses the local ONNX model or the heuristic fallback
 - `docker build -t dcats .` then `docker run --rm -p 4173:4173 dcats` —
   reproducible production web container.
 - Browser acceptance flow: Launch **Night Swarm Assault** → select a detected
-  contact → **Acquire Track** (T) → **AI Assess** (C) → **Accept Advisory** or
-  **Submit Assessment** → **Alert Team** (A) → **Engage** (E) → **End Exercise**
-  → AAR. Contacts enter the track database on first detection; a momentary
-  signal loss keeps the selection and holds the actions until reacquisition.
-  The final score includes missed/unclassified threats at mission close.
+  contact → **Acquire Track** (T) → wait for the **AI Assessment** → **Accept
+  Advisory** (C) or choose a classification and **Submit Assessment** → **Alert
+  Team** (A) → **Engage** (E) → **End Exercise** → AAR. Contacts enter the track
+  database on first detection; a momentary signal loss keeps the selection and
+  holds the actions until reacquisition. The final score includes
+  missed/unclassified threats at mission close.
 - Viewport: **EO/IR Feed** (3D battlefield — drag to orbit, scroll to zoom,
-  **Full View** for an immersive viewport) and **Radar**. The headset icon in
-  the 3D view opens the optional WebXR look-around mode described in **VR view
-  (WebXR)** above; it remains visible without a headset and explains why VR
-  cannot start.
+  **Full View** for a browser full-screen viewport) and **Radar**. The headset
+  icon in the 3D view opens the optional WebXR look-around mode described in
+  **VR view (WebXR)** above; it remains visible without a headset and explains
+  why VR cannot start.
 - VR delivery check: without a headset, the icon must remain visible and show
   the fallback message; with a WebXR headset over localhost/HTTPS, entering VR
   must show the battlefield with head tracking and exit must return to the
@@ -131,8 +132,9 @@ desktop/PWA runtime. The app uses the local ONNX model or the heuristic fallback
   are cached, then disable networking and reopen. The packaged Electron build is
   offline by construction.
 - Documentation: `docs/architecture.md`, `docs/sih_readiness_audit.md`,
-  `docs/unity_migration.md`, `sih_submission_content.md`, `demo_video_script.md`;
-  deck copy and review in `sih_ppt_slides/` (`DECK_COPY.md`, `README.md`).
+  `docs/unity_migration.md`, `docs/pitch_deck_outline.md`, `demo_video_script.md`.
+- Submission assets kept locally and intentionally excluded from the app repo:
+  `sih_ppt_slides/` (deck copy/review) and `sih_submission_content.md`.
 
 ---
 
