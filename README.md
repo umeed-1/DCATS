@@ -85,3 +85,7 @@ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" \
 - Offline: first load the production app online so the service worker and model
   are cached, then disable networking and reopen. The packaged Electron build is
   offline by construction.
+
+---
+
+Made with ❤️ by Team Trath
